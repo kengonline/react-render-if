@@ -1,6 +1,11 @@
 # react-render-if
 HOC to render component with condition
 
+### Installation
+```
+npm install --save render-if-react
+```
+
 ### Limitation
 Class component must be render as child.
 
