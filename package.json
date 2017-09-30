@@ -1,17 +1,15 @@
 {
   "name": "render-if-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HOC to render with condition",
   "main": "RenderIf.js",
-  "scripts": {
-    "test": "npm run test"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kengonline/react-render-if.git"
   },
   "keywords": [
-    "react"
+    "react",
+    "render"
   ],
   "author": "KengOnline",
   "license": "ISC",
