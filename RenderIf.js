@@ -3,7 +3,10 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
     component: PropTypes.func,
-    elseComponent: PropTypes.func,
+    elseComponent: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.func
+    ]),
     condition: PropTypes.any,
     strict: PropTypes.bool
 }
@@ -16,12 +19,23 @@ const defaultProps = {
 class RenderIf extends React.Component {
     constructor(props) {
         super(props);
-        
-        this.renderComponent = this.renderComponent.bind();
+
+        this.wrapComponent = this.wrapComponent.bind(this)
+        this.renderComponent = this.renderComponent.bind(this);
+    }
+
+    wrapComponent(component) {
+        if (component.prototype && !component.prototype.render) {
+            return () => component
+        }
     }
 
     renderComponent(elseComponent) {
-        if (elseComponent) {
+        if (!elseComponent) {
+            return null;
+        } else if (typeof elseComponent.type === 'function') {
+            return elseComponent;
+        } else if (typeof elseComponent === 'function') {
             return elseComponent();
         } else {
             return null;
@@ -29,20 +43,14 @@ class RenderIf extends React.Component {
     }
 
     render() {
-        const { component, children, condition, strict, elseComponent } = this.props;
+        const { component, children, condition, elseComponent } = this.props;
 
         if (!condition) return this.renderComponent(elseComponent);
 
         if (!!children) return children;
 
-        if (component.prototype && !component.prototype.render) return component();
+        if (component) return this.renderComponent(component);
 
-        const errorMsg = `State component(${component.prototype.constructor.name}) must be render as children elements!!!`;
-        if (strict) {
-            throw new Error(errorMsg);
-        } else {
-            console.warn(errorMsg);
-        }
         return this.renderComponent(elseComponent);
     }
 }
