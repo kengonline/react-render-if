@@ -1,6 +1,6 @@
 {
   "name": "render-if-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "HOC to render with condition",
   "main": "RenderIf.js",
   "repository": {
