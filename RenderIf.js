@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
     component: PropTypes.func,
-    condition: PropTypes.bool,
+    elseComponent: PropTypes.func,
+    condition: PropTypes.any,
     strict: PropTypes.bool
 }
 
@@ -13,11 +14,26 @@ const defaultProps = {
 }
 
 class RenderIf extends React.Component {
-    render() {
-        const { component, children, condition, strict } = this.props;
-        if (!condition) return null;
+    constructor(props) {
+        super(props);
+        
+        this.renderComponent = this.renderComponent.bind();
+    }
 
-        if (children) return children;
+    renderComponent(elseComponent) {
+        if (elseComponent) {
+            return elseComponent();
+        } else {
+            return null;
+        }
+    }
+
+    render() {
+        const { component, children, condition, strict, elseComponent } = this.props;
+
+        if (!condition) return this.renderComponent(elseComponent);
+
+        if (!!children) return children;
 
         if (component.prototype && !component.prototype.render) return component();
 
@@ -27,7 +43,7 @@ class RenderIf extends React.Component {
         } else {
             console.warn(errorMsg);
         }
-        return null;
+        return this.renderComponent(elseComponent);
     }
 }
 
